@@ -319,19 +319,17 @@ function Dashboard({data, onBack}){
   const [filter,setFilter]=useState("all");
   const [mounted,setMounted]=useState(false);
   useEffect(()=>{setTimeout(()=>setMounted(true),80);},[]);
-    if (!data || !data.biomarkers) return null;
 
-  const pat    = data.patient || {};
-  const bm     = data.biomarkers || [];
-  const abn = (data.abnormal || bm || []).filter(b => b && b.status !== "NORMAL");
-  const alerts = data.alerts || [];
-  const risks  = data.risk_scores || [];
-const sysh   = data.system_health || [];
-const adv    = data.advisory || {summary:"", sections:[]};
-const advSections = (adv.sections || []);
-  const stats  = data.stats || {total:bm.length,abnormal:abn.length,critical_flags:alerts.filter(a=>a.severity==="critical").length,systems_reviewed:8};
+  const pat    = data?.patient || {};
+  const bm     = data?.biomarkers || [];
+  const abn    = (data?.abnormal || bm).filter(b=>b && b.status!=="NORMAL");
+  const alerts = data?.alerts || [];
+  const risks  = data?.risk_scores || [];
+  const sysh   = data?.system_health || [];
+  const adv    = data?.advisory || {summary:"",sections:[]};
+  const advSections = adv.sections || [];
+  const stats  = data?.stats || {total:0,abnormal:0,critical_flags:0,systems_reviewed:8};
 
-  // Key gauges
   const keyMarkers = ["Hemoglobin","TSH","ESR","Vitamin D"];
   const keyBm      = keyMarkers.map(n=>bm.find(b=>b.name===n)).filter(Boolean);
   const hb  = useCount(keyBm[0]?.value||0, 1100, mounted);
@@ -339,6 +337,9 @@ const advSections = (adv.sections || []);
   const esr = useCount(keyBm[2]?.value||0, 900,  mounted);
   const vd  = useCount(keyBm[3]?.value||0, 1200, mounted);
   const gaugeVals=[hb,tsh,esr,vd];
+
+  // Guard AFTER all hooks
+  if (!data || !data.biomarkers) return null;
 
   // Group biomarkers by group
   const groups={};
