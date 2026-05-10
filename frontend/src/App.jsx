@@ -133,7 +133,8 @@ function UploadScreen({onResult}){
         clearInterval(t1); setStatus("demo-parsing");
         let i=0;
         const t2=setInterval(()=>{
-          setRows(r=>[...r,STREAM[i]]);
+  const currentItem = STREAM[i]; // capture NOW before i increments
+  setRows(r=>[...r, currentItem]);
           setParsePct(Math.round(((i+1)/STREAM.length)*100));
           i++;
           if(i>=STREAM.length){ clearInterval(t2); setTimeout(()=>onResult(DEMO_ANALYSIS),500); }
@@ -271,7 +272,7 @@ function UploadScreen({onResult}){
                     <div style={{height:"100%",background:D.em,borderRadius:99,width:`${status==="demo-scanning"?scanPct:parsePct}%`,transition:"width .1s linear"}}/>
                   </div>
                   <div style={{fontFamily:"monospace",fontSize:10.5,display:"flex",flexDirection:"column",gap:4}}>
-                    {rows.slice(-7).map((r,i)=>(
+                    {rows.slice(-7).filter(Boolean).map((r,i)=>(
                       <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"4px 8px",borderRadius:5,background:r.s==="HIGH"?D.redD:r.s==="LOW"?D.ambD:"rgba(255,255,255,0.02)",animation:"slideUp .15s ease",borderLeft:`2px solid ${r.s==="HIGH"?D.red:r.s==="LOW"?D.amb:D.t3}`}}>
                         <span style={{color:D.t2}}>{r.t}</span>
                         <span style={{color:r.s==="HIGH"?D.red:r.s==="LOW"?D.amb:D.grn,fontWeight:700}}>{r.v}</span>
