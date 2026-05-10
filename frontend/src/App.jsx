@@ -319,14 +319,16 @@ function Dashboard({data, onBack}){
   const [filter,setFilter]=useState("all");
   const [mounted,setMounted]=useState(false);
   useEffect(()=>{setTimeout(()=>setMounted(true),80);},[]);
+    if (!data || !data.biomarkers) return null;
 
   const pat    = data.patient || {};
   const bm     = data.biomarkers || [];
-  const abn    = data.abnormal || bm.filter(b=>b.status!=="NORMAL");
+  const abn = (data.abnormal || bm || []).filter(b => b && b.status !== "NORMAL");
   const alerts = data.alerts || [];
   const risks  = data.risk_scores || [];
-  const sysh   = data.system_health || [];
-  const adv    = data.advisory || {summary:"",sections:[]};
+const sysh   = data.system_health || [];
+const adv    = data.advisory || {summary:"", sections:[]};
+const advSections = (adv.sections || []);
   const stats  = data.stats || {total:bm.length,abnormal:abn.length,critical_flags:alerts.filter(a=>a.severity==="critical").length,systems_reviewed:8};
 
   // Key gauges
