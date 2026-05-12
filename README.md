@@ -1,10 +1,7 @@
-# BioTrack AI — Complete Project
+# BioTrack AI 
 
 **AI-Powered Pathology Report Analysis & Longitudinal Health Tracking**  
-Final Year Project · B.Sc. (Hons.) Computer Applications · AMU · 2025  
-Clinical Mentor: Prof. Nishat Afroz, Dept. of Pathology, JNMC, AMU
 
----
 
 ## Architecture
 
